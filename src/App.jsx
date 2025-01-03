@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
+import ProductCard from "./components/ProductCard";
 
 function App() {
   const [chatHistory, setChatHistory] = useState([]);
@@ -15,10 +16,34 @@ function App() {
     email: "",
   });
   const chatContainerRef = useRef(null);
+  const products = [
+    {
+      image:
+        "https://www.designinfo.in/wp-content/uploads/2023/01/Apple-iPhone-14-Pro-Mobile-Phone-493177786-i-1-1200Wx1200H.jpeg",
+      price: 29.99,
+      company: "Iphone 16",
+      category: "Mobile",
+    },
+    {
+      image:
+        "https://images.samsung.com/is/image/samsung/p6pim/in/ua32t4340akxxl/gallery/in-hd-tv-ua32t4340akxxl-front-black-537470101?$684_547_PNG$",
+      price: 39.99,
+      company: "Samsung",
+      category: "TV",
+    },
+    {
+      image:
+        "https://m.economictimes.com/thumb/msid-113322991,width-1200,height-900,resizemode-4,imgsize-48584/yamaha-new-r15.jpg",
+      price: 19.99,
+      company: "Yamaha R7",
+      category: "Bike",
+    },
+  ];
 
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   }, [chatHistory, generatingAnswer]);
 
@@ -50,12 +75,16 @@ function App() {
         newDetails.orderName = question; // Save order name
         setUserDetails(newDetails);
         setCurrentStep(2);
-        setAnswer(`Got it! What is the delivery address for ${newDetails.orderName}?`);
+        setAnswer(
+          `Got it! What is the delivery address for ${newDetails.orderName}?`
+        );
       } else if (currentStep === 2) {
         newDetails.address = question; // Save address
         setUserDetails(newDetails);
         setCurrentStep(3);
-        setAnswer(`Thanks! How many ${newDetails.orderName} would you like to order?`);
+        setAnswer(
+          `Thanks! How many ${newDetails.orderName} would you like to order?`
+        );
       } else if (currentStep === 3) {
         newDetails.quantity = question; // Save quantity
         setUserDetails(newDetails);
@@ -80,10 +109,15 @@ function App() {
             quantity: newDetails.quantity,
           });
 
-          setAnswer(`Order confirmed! A confirmation email has been sent to ${newDetails.email}.`);
+          setAnswer(
+            `Order confirmed! A confirmation email has been sent to ${newDetails.email}.`
+          );
           setChatHistory((prev) => [
             ...prev,
-            { type: "answer", content: `Order confirmed! A confirmation email has been sent to ${newDetails.email}.` },
+            {
+              type: "answer",
+              content: `Order confirmed! A confirmation email has been sent to ${newDetails.email}.`,
+            },
           ]);
         } else {
           setAnswer("Order canceled. Let me know if you'd like to try again!");
@@ -99,25 +133,28 @@ function App() {
   }
 
   function setAnswer(answer) {
-    setChatHistory((prev) => [
-      ...prev,
-      { type: "answer", content: answer },
-    ]);
+    setChatHistory((prev) => [...prev, { type: "answer", content: answer }]);
   }
 
   return (
     <div className="fixed inset-0 bg-gradient-to-r from-blue-50 to-blue-100">
       <div className="h-full max-w-4xl mx-auto flex flex-col p-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-4">
+          {products.map((product, index) => (
+            <ProductCard
+              key={index}
+              image={product.image}
+              price={product.price}
+              company={product.company}
+              category={product.category}
+            />
+          ))}
+        </div>
         {/* Fixed Header */}
         <header className="text-center py-4">
-          <a
-            // href="https://chat-ai.netlify.app/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block"
-          >
+          <a target="_blank" rel="noopener noreferrer" className="block">
             <h1 className="text-4xl font-bold text-blue-500 hover:text-blue-600 transition-colors">
-              Chat AI
+              Order AI
             </h1>
           </a>
         </header>
@@ -131,10 +168,11 @@ function App() {
             <div className="h-full flex flex-col items-center justify-center text-center p-6">
               <div className="bg-blue-50 rounded-xl p-8 max-w-2xl">
                 <h2 className="text-2xl font-bold text-blue-600 mb-4">
-                  Welcome to Chat AI! 👋
+                  Welcome to Order AI! 👋
                 </h2>
                 <p className="text-gray-600 mb-4">
-                  I'm here to help you place an order step by step. Let's get started!
+                  I'm here to help you place an order step by step. Let's get
+                  started!
                 </p>
                 <p className="text-gray-500 mt-6 text-sm">
                   Just type your responses below.

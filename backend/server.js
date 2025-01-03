@@ -1,8 +1,8 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
-import cors from 'cors'; // Import CORS middleware
+import express from "express";
+import bodyParser from "body-parser";
+import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+import cors from "cors"; // Import CORS middleware
 
 dotenv.config();
 
@@ -14,16 +14,16 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Email Sending Endpoint
-app.post('/send-email', async (req, res) => {
+app.post("/send-email", async (req, res) => {
   const { email, orderName, address, quantity } = req.body;
 
   if (!email || !orderName || !address || !quantity) {
-    return res.status(400).send('Missing order details.');
+    return res.status(400).send("Missing order details.");
   }
 
   // Configure Nodemailer
   const transporter = nodemailer.createTransport({
-    service: 'Gmail',
+    service: "Gmail",
     auth: {
       user: process.env.EMAIL_USER, // Your email address
       pass: process.env.EMAIL_PASS, // Your email password
@@ -34,7 +34,7 @@ app.post('/send-email', async (req, res) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
-    subject: 'Order Confirmation',
+    subject: "Order Confirmation",
     html: `
       <h1>Order Confirmation</h1>
       <p><strong>Order Name:</strong> ${orderName}</p>
@@ -45,10 +45,10 @@ app.post('/send-email', async (req, res) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    res.status(200).send('Email sent successfully!');
+    res.status(200).send("Email sent successfully!");
   } catch (error) {
-    console.error('Error sending email:', error);
-    res.status(500).send('Failed to send email.');
+    console.error("Error sending email:", error);
+    res.status(500).send("Failed to send email.");
   }
 });
 
