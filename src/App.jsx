@@ -102,13 +102,13 @@ function App() {
       } else if (currentStep === 5) {
         if (question.toLowerCase() === "yes") {
           // Send the email after confirmation
-          await axios.post("http://localhost:5000/send-email", {
+          await axios.post("https://order-ai-vqrr.onrender.com", {//https://your-backend-url.com/send-email
             email: newDetails.email,
             orderName: newDetails.orderName,
             address: newDetails.address,
             quantity: newDetails.quantity,
           });
-
+          
           setAnswer(
             `Order confirmed! A confirmation email has been sent to ${newDetails.email}.`
           );
